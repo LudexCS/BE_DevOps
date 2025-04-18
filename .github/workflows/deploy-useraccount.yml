@@ -37,6 +37,8 @@ jobs:
             DB_USER_NAME: "${{ secrets.DB_USER_NAME }}"
             DB_PASSWORD: "${{ secrets.DB_PASSWORD }}"
             DB_NAME: "${{ secrets.DB_NAME }}"
+            MAIL_USER: "${{ secrets.MAIL_USER }}"
+            MAIL_PASS: "${{ secrets.MAIL_PASS }}"
           EOF
 
       - name: Copy deployment files to EC2
