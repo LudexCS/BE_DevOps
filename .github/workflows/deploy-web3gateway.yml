@@ -1,7 +1,9 @@
-
 name: Deploy Web3Gateway to EC2
 
 on:
+  push:
+    branches:
+      - main
   repository_dispatch:
     types: [deploy-web3gateway]
 
