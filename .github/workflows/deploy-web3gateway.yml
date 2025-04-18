@@ -42,7 +42,7 @@ jobs:
       - name: Copy deployment files to EC2
         run: |
           scp -o StrictHostKeyChecking=no web3gateway-env.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/
-          scp -o StrictHostKeyChecking=no manifests/web3gateway/deployment.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}/
+          scp -o StrictHostKeyChecking=no manifests/web3gateway/deployment.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/
 
       - name: Deploy to K8s on EC2
         run: |
