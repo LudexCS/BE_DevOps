@@ -1,0 +1,50 @@
+name: Deploy UserAccount to EC2
+
+on:
+  repository_dispatch:
+    types: [deploy-useraccount]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Generate env config file (useraccount-env.yaml)
+        run: |
+          cat <<EOF > useraccount-env.yaml
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: useraccount-env
+          data:
+            JWT_SECRET: "${{ secrets.JWT_SECRET }}"
+            ACCESS_EXP: "${{ secrets.ACCESS_EXP }}"
+            REFRESH_EXP: "${{ secrets.REFRESH_EXP }}"
+            NODE_ENV: "${{ secrets.NODE_ENV }}"
+            DB_HOST: "${{ secrets.DB_HOST }}"
+            DB_PORT: "${{ secrets.DB_PORT }}"
+            DB_USER_NAME: "${{ secrets.DB_USER_NAME }}"
+            DB_PASSWORD: "${{ secrets.DB_PASSWORD }}"
+            DB_NAME: "${{ secrets.DB_NAME }}"
+          EOF
+
+      - name: Copy deployment files to EC2
+        run: |
+          scp -o StrictHostKeyChecking=no useraccount-env.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/
+          scp -o StrictHostKeyChecking=no DevOps/useraccount/deployment.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/
+
+      - name: Deploy to K8s on EC2
+        run: |
+          
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            kubectl apply -f /home/${{ secrets.EC2_USER }}/useraccount-env.yaml
+            kubectl apply -f /home/${{ secrets.EC2_USER }}/deployment.yaml
+          EOF

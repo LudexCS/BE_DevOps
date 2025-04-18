@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: useraccount
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: useraccount
+  template:
+    metadata:
+      labels:
+        app: useraccount
+    spec:
+      containers:
+        - name: useraccount
+          image: gomdadi/useraccount:latest
+          ports:
+            - containerPort: 3000
+            - containerPort: 50051
+          envFrom:
+            - configMapRef:
+                name: useraccount-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: useraccount-rest
+spec:
+  type: NodePort
+  selector:
+    app: useraccount
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 30300
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: useraccount-grpc
+spec:
+  type: ClusterIP
+  selector:
+    app: useraccount
+  ports:
+    - port: 50051
+      targetPort: 50051
