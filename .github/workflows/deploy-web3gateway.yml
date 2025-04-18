@@ -1,0 +1,50 @@
+
+name: Deploy Web3Gateway to EC2
+
+on:
+  repository_dispatch:
+    types: [deploy-web3gateway]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Generate env config file (web3gateway-env.yaml)
+        run: |
+          cat <<EOF > web3gateway-env.yaml
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: web3gateway-env
+          data:
+            NODE_ENV: "${{ secrets.NODE_ENV }}"
+            DB_HOST: "${{ secrets.DB_HOST }}"
+            DB_PORT: "${{ secrets.DB_PORT }}"
+            DB_USER_NAME: "${{ secrets.DB_USER_NAME }}"
+            DB_PASSWORD: "${{ secrets.DB_PASSWORD }}"
+            DB_NAME: "${{ secrets.DB_NAME }}"
+            SIWE_EXP: "${{ secrets.SIWE_EXP }}"
+            USERACCOUNT_INNER: "${{ secrets.USERACCOUNT_INNER }}"
+            ETH_NET: "${{ secrets.ETH_NET }}"
+          EOF
+
+      - name: Copy deployment files to EC2
+        run: |
+          scp -o StrictHostKeyChecking=no web3gateway-env.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/
+          scp -o StrictHostKeyChecking=no DevOps/web3gateway/deployment.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}/
+
+      - name: Deploy to K8s on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            kubectl apply -f /home/${{ secrets.EC2_USER }}/web3gateway-env.yaml
+            kubectl apply -f /home/${{ secrets.EC2_USER }}/deployment.yaml
+          EOF
