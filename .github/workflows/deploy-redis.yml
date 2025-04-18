@@ -23,7 +23,7 @@ jobs:
 
       - name: Copy deployment file to EC2
         run: |
-          scp -o StrictHostKeyChecking=no redis/deployment.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/redis-deployment.yaml
+          scp -o StrictHostKeyChecking=no manifests/redis/deployment.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/redis-deployment.yaml
 
       - name: Apply Kubernetes deployment on EC2
         run: |
