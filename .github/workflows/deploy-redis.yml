@@ -2,8 +2,6 @@ name: Deploy Redis to EC2
 
 on:
   push:
-    paths:
-      - 'redis/deployment.yaml'
     branches:
       - main
 
