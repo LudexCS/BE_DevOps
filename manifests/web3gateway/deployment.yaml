@@ -17,6 +17,7 @@ spec:
           image: gomdadi/web3gateway:latest
           imagePullPolicy: Always
           ports:
+            - containerPort: 3000
             - containerPort: 50052
           envFrom:
             - configMapRef:
