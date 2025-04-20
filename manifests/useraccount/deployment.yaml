@@ -15,6 +15,7 @@ spec:
       containers:
         - name: useraccount
           image: gomdadi/useraccount:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
             - containerPort: 50051

@@ -15,6 +15,7 @@ spec:
       containers:
         - name: web3gateway
           image: gomdadi/web3gateway:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 50052
           envFrom:
