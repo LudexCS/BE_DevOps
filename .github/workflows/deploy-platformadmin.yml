@@ -1,0 +1,54 @@
+name: Deploy PlatformAdmin to EC2
+
+on:
+  push:
+    branches:
+      - main
+  repository_dispatch:
+    types: [deploy-platformadmin]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Generate env config file (platformadmin-env.yaml)
+        run: |
+          cat <<EOF > platformadmin-env.yaml
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: platformadmin-env
+          data:
+            DB_HOST: "${{ secrets.DB_HOST }}"
+            DB_PORT: "${{ secrets.DB_PORT }}"
+            DB_USER_NAME: "${{ secrets.DB_USER_NAME }}"
+            DB_PASSWORD: "${{ secrets.DB_PASSWORD }}"
+            DB_NAME: "${{ secrets.DB_NAME }}"
+            NODE_ENV: "${{ secrets.NODE_ENV }}"
+            USERACCOUNT_INNER: "${{ secrets.USERACCOUNT_INNER }}"
+            AWS_S3_BUCKET: "${{ secrets.AWS_S3_BUCKET }}"
+            AWS_REGION: "${{ secrets.AWS_REGION }}"
+            CLIENT_ORIGIN: "${{ secrets.CLIENT_ORIGIN }}"
+          EOF
+
+      - name: Copy deployment files to EC2
+        run: |
+          scp -o StrictHostKeyChecking=no platformadmin-env.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/
+          scp -o StrictHostKeyChecking=no manifests/platformadmin/deployment.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/
+
+      - name: Deploy to K8s on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            kubectl apply -f /home/${{ secrets.EC2_USER }}/platformadmin-env.yaml
+            kubectl apply -f /home/${{ secrets.EC2_USER }}/deployment.yaml
+            kubectl rollout restart deployment platformadmin
+          EOF
