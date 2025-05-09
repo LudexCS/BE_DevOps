@@ -37,6 +37,8 @@ jobs:
             SIWE_EXP: "${{ secrets.SIWE_EXP }}"
             USERACCOUNT_INNER: "${{ secrets.USERACCOUNT_INNER }}"
             ETH_NET: "${{ secrets.ETH_NET }}"
+            RPC_URL: "${{ secrets.RPC_URL }}"
+            MNEMONIC_CODE: "${{ secrets.MNEMONIC_CODE }}"
           EOF
 
       - name: Copy deployment files to EC2
