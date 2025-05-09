@@ -39,6 +39,7 @@ jobs:
             ETH_NET: "${{ secrets.ETH_NET }}"
             RPC_URL: "${{ secrets.RPC_URL }}"
             MNEMONIC_CODE: "${{ secrets.MNEMONIC_CODE }}"
+            MANAGEMENT_INNER: "${{ secrets.MANAGEMENT_INNER }}"
           EOF
 
       - name: Copy deployment files to EC2
