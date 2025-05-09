@@ -17,7 +17,7 @@ spec:
           image: gomdadi/web3gateway:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 3000
+            - containerPort: 4000
             - containerPort: 50052
           envFrom:
             - configMapRef:
@@ -33,8 +33,8 @@ spec:
   selector:
     app: web3gateway
   ports:
-    - port: 3000
-      targetPort: 3000
+    - port: 4000
+      targetPort: 4000
       nodePort: 30352
 
 ---
