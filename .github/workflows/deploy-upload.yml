@@ -39,6 +39,8 @@ jobs:
             AWS_REGION: "${{ secrets.AWS_REGION }}"
             CLIENT_ORIGIN: "${{ secrets.CLIENT_ORIGIN }}"
             MANAGEMENT_INNER: "${{ secrets.MANAGEMENT_INNER }}"
+            AWS_S3_EXPIRES_IN: "${{ secrets.AWS_S3_EXPIRES_IN }}"
+            Purchase_INNER: "${{ secrets.Purchase_INNER }}"
           EOF
 
       - name: Copy deployment files to EC2
