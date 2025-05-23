@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'manifests/qdrant/deployment.yaml'
+      - '.github/workflows/deploy-qdrant.yml'
 
 jobs:
   deploy:
