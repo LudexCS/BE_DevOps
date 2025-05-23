@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'manifests/platformadmin/deployment.yaml'
+      - '.github/workflows/deploy-platformadmin.yml'
   repository_dispatch:
     types: [deploy-platformadmin]
 

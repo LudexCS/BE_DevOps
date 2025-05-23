@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'manifests/upload/deployment.yaml'
+      - '.github/workflows/deploy-upload.yml'
   repository_dispatch:
     types: [deploy-upload]
 

@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'manifests/web3gateway/deployment.yaml'
+      - '.github/workflows/deploy-web3gateway.yml'
   repository_dispatch:
     types: [deploy-web3gateway]
 
