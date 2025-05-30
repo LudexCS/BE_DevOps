@@ -40,6 +40,8 @@ jobs:
             USERACCOUNT_INNER: "${{ secrets.USERACCOUNT_INNER }}"
             CLIENT_ORIGIN: "${{ secrets.CLIENT_ORIGIN }}"
             MANAGEMENT_INNER: "${{ secrets.MANAGEMENT_INNER }}"
+            PAYMENT_TTL: "${{ secrets.PAYMENT_TTL }}"
+            TOSS_PAYMENT_API_SECRET_KEY: "${{ secrets.TOSS_PAYMENT_API_SECRET_KEY }}"
           EOF
 
       - name: Copy deployment files to EC2
