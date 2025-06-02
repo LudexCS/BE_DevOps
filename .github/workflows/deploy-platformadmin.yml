@@ -41,6 +41,8 @@ jobs:
             AWS_S3_BUCKET: "${{ secrets.AWS_S3_BUCKET }}"
             AWS_REGION: "${{ secrets.AWS_REGION }}"
             CLIENT_ORIGIN: "${{ secrets.CLIENT_ORIGIN }}"
+            MAIL_USER: "${{ secrets.MAIL_USER }}"
+            MAIL_PASS: "${{ secrets.MAIL_PASS }}"
           EOF
 
       - name: Copy deployment files to EC2
