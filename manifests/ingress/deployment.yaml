@@ -18,35 +18,35 @@ spec:
                 name: useraccount-rest
                 port:
                   number: 3000
-          - path: /web3gateway(/|$)(.*)
+          - path: /web3gateway
             pathType: Prefix
             backend:
               service:
                 name: web3gateway-rest
                 port:
                   number: 3000
-          - path: /upload(/|$)(.*)
+          - path: /upload
             pathType: Prefix
             backend:
               service:
                 name: upload-rest
                 port:
                   number: 3000
-          - path: /purchase(/|$)(.*)
+          - path: /purchase
             pathType: Prefix
             backend:
               service:
                 name: purchase-rest
                 port:
                   number: 3000
-          - path: /platformadmin(/|$)(.*)
+          - path: /platformadmin
             pathType: Prefix
             backend:
               service:
                 name: platformadmin-rest
                 port:
                   number: 3000
-          - path: /management(/|$)(.*)
+          - path: /management
             pathType: Prefix
             backend:
               service:
