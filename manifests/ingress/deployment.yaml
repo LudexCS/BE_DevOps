@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: api.uosludex.com
+    - host: uosludex.com
       http:
         paths:
           - path: /useraccount(/|$)(.*)
