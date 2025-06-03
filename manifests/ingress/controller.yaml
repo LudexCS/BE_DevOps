@@ -4,11 +4,12 @@ metadata:
   name: ingress-nginx
 ---
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
   name: ingress-nginx-controller
   namespace: ingress-nginx
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: ingress-nginx
@@ -19,13 +20,13 @@ spec:
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
+      nodeSelector:
+        kubernetes.io/hostname: ip-172-31-29-35.ap-northeast-2.compute.internal
       containers:
         - name: controller
           image: k8s.gcr.io/ingress-nginx/controller:v1.10.0
           args:
             - /nginx-ingress-controller
-            - --publish-service=ingress-nginx/ingress-nginx-controller
-            - --election-id=ingress-controller-leader
             - --controller-class=k8s.io/ingress-nginx
             - --ingress-class=nginx
             - --watch-ingress-without-class=true
