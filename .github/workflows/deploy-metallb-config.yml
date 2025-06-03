@@ -1,0 +1,32 @@
+name: Deploy MetalLB Config to EC2
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'manifests/ingress/metallb-config.yaml'
+      - '.github/workflows/deploy-metallb-config.yml'
+
+jobs:
+  deploy-ingress-controller:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Copy MetalLB config to EC2
+        run: |
+          scp -o StrictHostKeyChecking=no manifests/ingress/metallb-config.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/metallb-config.yaml
+
+      - name: Apply MetalLB config to Kubernetes on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            kubectl apply -f /home/${{ secrets.EC2_USER }}/metallb-config.yaml
+          EOF
