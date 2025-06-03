@@ -29,13 +29,12 @@ kind: Service
 metadata:
   name: web3gateway-rest
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: web3gateway
   ports:
     - port: 4000
       targetPort: 4000
-      nodePort: 30352
 
 ---
 apiVersion: v1

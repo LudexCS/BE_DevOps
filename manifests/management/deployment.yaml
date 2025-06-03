@@ -29,13 +29,12 @@ kind: Service
 metadata:
   name: management-rest
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: management
   ports:
     - port: 3000
       targetPort: 3000
-      nodePort: 30353
 
 ---
 apiVersion: v1

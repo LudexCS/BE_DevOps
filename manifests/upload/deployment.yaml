@@ -29,13 +29,12 @@ kind: Service
 metadata:
   name: upload-rest
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: upload
   ports:
     - port: 3000
       targetPort: 3000
-      nodePort: 30355
 
 ---
 apiVersion: v1
