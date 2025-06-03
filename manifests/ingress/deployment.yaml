@@ -4,11 +4,12 @@ metadata:
   name: backend-ingress
   namespace: default
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
   rules:
-    - http:
+    - host: api.uosludex.com
+      http:
         paths:
           - path: /useraccount(/|$)(.*)
             pathType: ImplementationSpecific
@@ -60,11 +61,12 @@ metadata:
   name: frontend-ingress
   namespace: default
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"  # HTTP만 쓸 경우
+    traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
   rules:
-    - http:
+    - host: uosludex.com
+      http:
         paths:
           - path: /
             pathType: Prefix
