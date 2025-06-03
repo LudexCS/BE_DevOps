@@ -27,5 +27,6 @@ jobs:
       - name: Deploy Ingress to K8s on EC2
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            kubectl delete ingress backend-ingress frontend-ingress -n default
             kubectl apply -f /home/${{ secrets.EC2_USER }}/ingress-deployment.yaml
           EOF
