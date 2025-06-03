@@ -30,4 +30,5 @@ jobs:
             kubectl delete ingress backend-ingress -n default --ignore-not-found
             kubectl delete ingress frontend-ingress -n default --ignore-not-found
             kubectl delete ValidatingWebhookConfiguration ingress-nginx-admission --ignore-not-found
+            kubectl apply -f ingress-deployment.yaml
           EOF
