@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ludex-ingress
+  name: backend-ingress
   namespace: default
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
@@ -10,13 +10,6 @@ spec:
   rules:
     - http:
         paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: frontend
-                port:
-                  number: 80
           - path: /useraccount(/|$)(.*)
             pathType: Prefix
             backend:
@@ -59,3 +52,24 @@ spec:
                 name: management-rest
                 port:
                   number: 3000
+---
+# FrontEnd 전용 Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"  # HTTP만 쓸 경우
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
