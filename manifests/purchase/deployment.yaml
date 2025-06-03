@@ -29,13 +29,12 @@ kind: Service
 metadata:
   name: purchase-rest
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: purchase
   ports:
     - port: 3000
       targetPort: 3000
-      nodePort: 30356
 
 ---
 apiVersion: v1

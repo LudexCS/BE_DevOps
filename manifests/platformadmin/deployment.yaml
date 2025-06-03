@@ -29,13 +29,12 @@ kind: Service
 metadata:
   name: platformadmin-rest
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: platformadmin
   ports:
     - port: 3000
       targetPort: 3000
-      nodePort: 30354
 
 ---
 apiVersion: v1
