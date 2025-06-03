@@ -8,6 +8,9 @@ metadata:
     traefik.ingress.kubernetes.io/router.tls.certresolver: le
 spec:
   ingressClassName: traefik
+  tls:
+    - hosts:
+        - api.uosludex.com
   rules:
     - host: api.uosludex.com
       http:
@@ -66,6 +69,9 @@ metadata:
     traefik.ingress.kubernetes.io/router.tls.certresolver: le
 spec:
   ingressClassName: traefik
+  tls:
+    - hosts:
+        - uosludex.com
   rules:
     - host: uosludex.com
       http:
