@@ -5,14 +5,13 @@ metadata:
   namespace: default
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
-    traefik.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   ingressClassName: traefik
   rules:
     - host: api.uosludex.com
       http:
         paths:
-          - path: /useraccount(/|$)(.*)
+          - path: /useraccount
             pathType: Prefix
             backend:
               service:
