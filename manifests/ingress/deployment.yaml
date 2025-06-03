@@ -13,42 +13,42 @@ spec:
       http:
         paths:
           - path: /useraccount(/|$)(.*)
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
               service:
                 name: useraccount-rest
                 port:
                   number: 3000
           - path: /web3gateway(/|$)(.*)
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
               service:
                 name: web3gateway-rest
                 port:
                   number: 3000
           - path: /upload(/|$)(.*)
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
               service:
                 name: upload-rest
                 port:
                   number: 3000
           - path: /purchase(/|$)(.*)
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
               service:
                 name: purchase-rest
                 port:
                   number: 3000
           - path: /platformadmin(/|$)(.*)
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
               service:
                 name: platformadmin-rest
                 port:
                   number: 3000
           - path: /management(/|$)(.*)
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
               service:
                 name: management-rest
