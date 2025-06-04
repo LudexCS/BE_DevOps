@@ -43,6 +43,7 @@ jobs:
             RPC_URL: "${{ secrets.RPC_URL }}"
             MNEMONIC_CODE: "${{ secrets.MNEMONIC_CODE }}"
             MANAGEMENT_INNER: "${{ secrets.MANAGEMENT_INNER }}"
+            MAIN_TOKEN_ADDRESS: "${{ secrets.MAIN_TOKEN_ADDRESS }}"
           EOF
 
       - name: Copy deployment files to EC2
