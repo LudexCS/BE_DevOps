@@ -43,6 +43,7 @@ jobs:
             CLIENT_ORIGIN: "${{ secrets.CLIENT_ORIGIN }}"
             MAIL_USER: "${{ secrets.MAIL_USER }}"
             MAIL_PASS: "${{ secrets.MAIL_PASS }}"
+            WEB3GATEWAY_INNER: "${{ secrets.WEB3GATEWAY_INNER }}"
           EOF
 
       - name: Copy deployment files to EC2
