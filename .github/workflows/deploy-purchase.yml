@@ -42,6 +42,7 @@ jobs:
             MANAGEMENT_INNER: "${{ secrets.MANAGEMENT_INNER }}"
             PAYMENT_TTL: "${{ secrets.PAYMENT_TTL }}"
             TOSS_PAYMENT_API_SECRET_KEY: "${{ secrets.TOSS_PAYMENT_API_SECRET_KEY }}"
+            WEB3GATEWAY_INNER: "${{ secrets.WEB3GATEWAY_INNER }}"
           EOF
 
       - name: Copy deployment files to EC2
