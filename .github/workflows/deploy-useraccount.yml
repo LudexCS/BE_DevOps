@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'manifests/useraccount/deployment.yaml'
+      - '.github/workflows/deploy-useraccount.yml'
   repository_dispatch:
     types: [deploy-useraccount]
 

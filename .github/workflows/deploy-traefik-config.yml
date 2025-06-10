@@ -1,0 +1,31 @@
+name: Deploy Traefik Config
+
+on:
+  push:
+    paths:
+      - 'manifests/ingress/traefik-config.yaml'
+      - '.github/workflows/deploy-traefik-config.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy-traefik:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Copy Traefik config to EC2
+        run: |
+          scp -o StrictHostKeyChecking=no manifests/ingress/traefik-config.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/traefik-config.yaml
+
+      - name: Apply Traefik config to Kubernetes on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            kubectl apply -f /home/${{ secrets.EC2_USER }}/traefik-config.yaml
+          EOF

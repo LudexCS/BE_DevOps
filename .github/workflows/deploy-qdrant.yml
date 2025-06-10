@@ -1,16 +1,16 @@
-name: Deploy Redis to EC2
+name: Deploy Qdrant to EC2
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'manifests/redis/deployment.yaml'
-      - '.github/workflows/deploy-redis.yml'
+      - 'manifests/qdrant/deployment.yaml'
+      - '.github/workflows/deploy-qdrant.yml'
 
 jobs:
   deploy:
-    name: Deploy Redis to EC2 via SSH
+    name: Deploy Qdrant to EC2 via SSH
     runs-on: ubuntu-latest
 
     steps:
@@ -22,12 +22,12 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-      - name: Copy deployment file to EC2
+      - name: Copy Qdrant deployment file to EC2
         run: |
-          scp -o StrictHostKeyChecking=no manifests/redis/deployment.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/redis-deployment.yaml
+          scp -o StrictHostKeyChecking=no manifests/qdrant/deployment.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/qdrant-deployment.yaml
 
       - name: Apply Kubernetes deployment on EC2
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            kubectl apply -f /home/${{ secrets.EC2_USER }}/redis-deployment.yaml
+            kubectl apply -f /home/${{ secrets.EC2_USER }}/qdrant-deployment.yaml
           EOF

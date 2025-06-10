@@ -29,13 +29,12 @@ kind: Service
 metadata:
   name: useraccount-rest
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: useraccount
   ports:
     - port: 3000
       targetPort: 3000
-      nodePort: 30300
 
 ---
 apiVersion: v1

@@ -1,14 +1,14 @@
-name: Deploy Web3Gateway to EC2
+name: Deploy Upload to EC2
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'manifests/web3gateway/deployment.yaml'
-      - '.github/workflows/deploy-web3gateway.yml'
+      - 'manifests/upload/deployment.yaml'
+      - '.github/workflows/deploy-upload.yml'
   repository_dispatch:
-    types: [deploy-web3gateway]
+    types: [deploy-upload]
 
 jobs:
   deploy:
@@ -23,38 +23,38 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-      - name: Generate env config file (web3gateway-env.yaml)
+      - name: Generate env config file (upload-env.yaml)
         run: |
-          cat <<EOF > web3gateway-env.yaml
+          cat <<EOF > upload-env.yaml
           apiVersion: v1
           kind: ConfigMap
           metadata:
-            name: web3gateway-env
+            name: upload-env
           data:
-            NODE_ENV: "${{ secrets.NODE_ENV }}"
             DB_HOST: "${{ secrets.DB_HOST }}"
             DB_PORT: "${{ secrets.DB_PORT }}"
             DB_USER_NAME: "${{ secrets.DB_USER_NAME }}"
             DB_PASSWORD: "${{ secrets.DB_PASSWORD }}"
             DB_NAME: "${{ secrets.DB_NAME }}"
-            SIWE_EXP: "${{ secrets.SIWE_EXP }}"
+            NODE_ENV: "${{ secrets.NODE_ENV }}"
             USERACCOUNT_INNER: "${{ secrets.USERACCOUNT_INNER }}"
-            ETH_NET: "${{ secrets.ETH_NET }}"
-            RPC_URL: "${{ secrets.RPC_URL }}"
-            MNEMONIC_CODE: "${{ secrets.MNEMONIC_CODE }}"
+            AWS_S3_BUCKET: "${{ secrets.AWS_S3_BUCKET }}"
+            AWS_REGION: "${{ secrets.AWS_REGION }}"
+            CLIENT_ORIGIN: "${{ secrets.CLIENT_ORIGIN }}"
             MANAGEMENT_INNER: "${{ secrets.MANAGEMENT_INNER }}"
-            MAIN_TOKEN_ADDRESS: "${{ secrets.MAIN_TOKEN_ADDRESS }}"
+            AWS_S3_EXPIRES_IN: "${{ secrets.AWS_S3_EXPIRES_IN }}"
+            Purchase_INNER: "${{ secrets.Purchase_INNER }}"
           EOF
 
       - name: Copy deployment files to EC2
         run: |
-          scp -o StrictHostKeyChecking=no web3gateway-env.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/
-          scp -o StrictHostKeyChecking=no manifests/web3gateway/deployment.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/
+          scp -o StrictHostKeyChecking=no upload-env.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/
+          scp -o StrictHostKeyChecking=no manifests/upload/deployment.yaml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/
 
       - name: Deploy to K8s on EC2
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            kubectl apply -f /home/${{ secrets.EC2_USER }}/web3gateway-env.yaml
+            kubectl apply -f /home/${{ secrets.EC2_USER }}/upload-env.yaml
             kubectl apply -f /home/${{ secrets.EC2_USER }}/deployment.yaml
-            kubectl rollout restart deployment web3gateway
+            kubectl rollout restart deployment upload
           EOF

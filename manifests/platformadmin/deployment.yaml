@@ -1,37 +1,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web3gateway
+  name: platformadmin
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: web3gateway
+      app: platformadmin
   template:
     metadata:
       labels:
-        app: web3gateway
+        app: platformadmin
     spec:
       containers:
-        - name: web3gateway
-          image: gomdadi/web3gateway:latest
+        - name: platformadmin
+          image: gomdadi/platformadmin:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
-            - containerPort: 50052
+            - containerPort: 50054
           envFrom:
             - configMapRef:
-                name: web3gateway-env
+                name: platformadmin-env
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: web3gateway-rest
+  name: platformadmin-rest
 spec:
   type: ClusterIP
   selector:
-    app: web3gateway
+    app: platformadmin
   ports:
     - port: 3000
       targetPort: 3000
@@ -40,11 +40,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: web3gateway-grpc
+  name: platformadmin-grpc
 spec:
   type: ClusterIP
   selector:
-    app: web3gateway
+    app: platformadmin
   ports:
-    - port: 50052
-      targetPort: 50052
+    - port: 50054
+      targetPort: 50054
